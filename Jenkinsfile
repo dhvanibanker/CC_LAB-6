@@ -4,10 +4,11 @@ pipeline {
     stages {
 
         stage('Checkout Code') {
-            steps {
-                git 'https://github.com/dhvanibanker/CC_LAB-6.git'
-            }
-        }
+    steps {
+        git branch: 'main',
+            url: 'https://github.com/dhvanibanker/CC_LAB-6.git'
+           }
+       } 
 
         stage('Build Docker Image') {
             steps {
