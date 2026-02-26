@@ -27,20 +27,22 @@ pipeline {
         }
 
         stage('Run NGINX Load Balancer') {
-            steps {
-                sh '''
-                docker rm -f nginx-lb || true
-                docker network create lab-net || true
-                docker network connect lab-net backend1 || true
-                docker network connect lab-net backend2 || true
+    steps {
+        sh '''
+        docker rm -f nginx-lb || true
+        docker network create lab-net || true
 
-                docker run -d --name nginx-lb \
-                --network lab-net \
-                -p 80:80 \
-                -v $(pwd)/nginx/default.conf:/etc/nginx/conf.d/default.conf \
-                nginx
-                '''
-            }
-        }
+        docker network connect lab-net backend1 || true
+        docker network connect lab-net backend2 || true
+
+        docker build -t nginx-lb-image nginx
+
+        docker run -d --name nginx-lb \
+        --network lab-net \
+        -p 80:80 \
+        nginx-lb-image
+        '''
+         }
+      }
     }
 }
